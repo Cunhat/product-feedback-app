@@ -1,20 +1,17 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import { trpc } from "../utils/trpc";
-
-type TechnologyCardProps = {
-  name: string;
-  description: string;
-  documentation: string;
-};
+import type { NextPage } from 'next';
+import { trpc } from '../utils/trpc';
+import { Button } from '../components/Button';
 
 const Home: NextPage = () => {
-  const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
+  const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }]);
 
   return (
-    <>
-      <p className="font-semiBold">Teste</p>
-    </>
+    <div className='flex flex-col gap-1 m-1'>
+      <Button color='violet' onClick={()=> console.log("huhuhuh")} text="Button 1"/>
+      <Button color='blue' onClick={()=> console.log("huhuhuh")} text="Button 1"/>
+      <Button color='darkBlue' onClick={()=> console.log("huhuhuh")} text="Button 1"/>
+      <Button color='red' onClick={()=> console.log("huhuhuh")} text="Button 1"/>
+    </div>
   );
 };
 
