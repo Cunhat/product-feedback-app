@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { trpc } from '../utils/trpc';
-import { Button } from '../components/Button';
+import { Button, IconButton } from '../components/Button';
 
 const Home: NextPage = () => {
   const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }]);
@@ -11,6 +11,8 @@ const Home: NextPage = () => {
       <Button color='blue' onClick={()=> console.log("huhuhuh")} text="Button 1"/>
       <Button color='darkBlue' onClick={()=> console.log("huhuhuh")} text="Button 1"/>
       <Button color='red' onClick={()=> console.log("huhuhuh")} text="Button 1"/>
+      <IconButton isPrimary onClick={()=> console.log("huhuhuh")} text="Button 1"/>
+      <IconButton isSecondary onClick={()=> console.log("huhuhuh")} text="Button 1"/>
     </div>
   );
 };
