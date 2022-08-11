@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       colors: {
         'custom-violet': '#AD1FEA',
+        'light-violet': '#CFD7FF',
         'custom-blue': '#4661E6',
         'light-blue': '#62BCFA',
         'dark-blue': '#3A4374',
@@ -12,6 +13,7 @@ module.exports = {
         stone: '#F7F8FD',
         'light-gray': '#F2F4FF',
         'light-gray-2': '#CDD2EE',
+        'light-gray-3': '#F2F4FE',
         'dark-gray': '#647196',
         'orange-pastel': '#F49F85',
         'custom-red': '#D73737',
