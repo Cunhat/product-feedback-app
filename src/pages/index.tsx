@@ -2,23 +2,22 @@ import type { NextPage } from 'next';
 import { trpc } from '../utils/trpc';
 import { Button, IconButton } from '../components/Button';
 import { UpVote } from '../components/UpVote';
-import {Tag} from '../components/Tag';
+import { Tag } from '../components/Tag';
 
 const Home: NextPage = () => {
   const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }]);
 
   return (
-    <div className='flex flex-col gap-1 m-1'>
-      <Button color='violet' onClick={() => console.log('huhuhuh')} text='Button 1' />
-      <Button color='blue' onClick={() => console.log('huhuhuh')} text='Button 1' />
-      <Button color='darkBlue' onClick={() => console.log('huhuhuh')} text='Button 1' />
-      <Button color='red' onClick={() => console.log('huhuhuh')} text='Button 1' />
-      <IconButton isPrimary onClick={() => console.log('huhuhuh')} text='Button 1' />
-      <IconButton isSecondary onClick={() => console.log('huhuhuh')} text='Button 1' />
-      <UpVote number={99}  active={false} />
-      <UpVote number={100} active />
-      <Tag text='UX' />
-      <Tag text='UX' isActive/>
+    <div className='flex gap-[30px] px-[165px] pt-[94px] w-full h-screen bg-stone'>
+      <div className=' w-[255px] h-full flex flex-col gap-[24px]'>
+        <div className='h-[137px] bg-desktop-gradient rounded-[10px]'></div>
+        <div className='h-[166px] bg-white rounded-[10px]'></div>
+        <div className='h-[178px] bg-white rounded-[10px]'></div>
+      </div>
+      <div className='flex flex-col flex-1 h-full gap-[20px]'>
+        <div className='h-[72px] bg-dark-blue-2 rounded-[10px] mb-1'></div>
+        <div className='flex-1 bg-white rounded-[10px] max-h-[600px]'></div>
+      </div>
     </div>
   );
 };

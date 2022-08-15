@@ -27,6 +27,9 @@ module.exports = {
         bold: 'Jost Bold',
         semiBold: 'Jost SemiBold',
       },
+      backgroundImage: {
+        "desktop-gradient": "url('/img/desktop/background-header.png')",
+      }
     },
   },
   plugins: [],
