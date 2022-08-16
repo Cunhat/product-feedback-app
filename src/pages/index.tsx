@@ -1,8 +1,6 @@
 import type { NextPage } from 'next';
 import { trpc } from '../utils/trpc';
-import { Button, IconButton } from '../components/Button';
-import { UpVote } from '../components/UpVote';
-import { Tag } from '../components/Tag';
+import { Badge } from '../components/Badge';
 
 const Home: NextPage = () => {
   const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }]);
@@ -10,7 +8,9 @@ const Home: NextPage = () => {
   return (
     <div className='flex gap-[30px] px-[165px] pt-[94px] w-full h-screen bg-stone'>
       <div className=' w-[255px] h-full flex flex-col gap-[24px]'>
-        <div className='h-[137px] bg-desktop-gradient rounded-[10px]'></div>
+        <div className='h-[137px]'>
+          <Badge />
+        </div>
         <div className='h-[166px] bg-white rounded-[10px]'></div>
         <div className='h-[178px] bg-white rounded-[10px]'></div>
       </div>
