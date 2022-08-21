@@ -2,8 +2,13 @@ import type { NextPage } from 'next';
 import { trpc } from '../utils/trpc';
 import { Badge } from '../components/Badge';
 import { Tag } from '../components/Tag';
+import EmptyImg from '../assets/images/emptyComments.svg';
+import Image from 'next/image';
+import { Button } from '../components/Button';
 
 const FILTERS = ['all', 'frontend', 'backend', 'mobile', 'UX'];
+
+const comments = [];
 
 const Home: NextPage = () => {
   const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }]);
@@ -33,7 +38,7 @@ const Home: NextPage = () => {
       </div>
       <div className='flex flex-col flex-1 h-full gap-[20px]'>
         <div className='h-[72px] bg-dark-blue-2 rounded-[10px] mb-1'></div>
-        <div className='flex-1 bg-white rounded-[10px] max-h-[600px]'></div>
+        <div className='flex-1 bg-white rounded-[10px] max-h-[600px]'>{comments.length > 0 ? <></> : <EmptyState />}</div>
       </div>
     </div>
   );
@@ -55,6 +60,20 @@ const RoadMapItem: React.FC<RoadMapItemProps> = (props) => {
         <p className='text-[16px] text-gray-custom '>{props.title}</p>
       </div>
       <p className='ml-auto text-gray-custom font-bold'>{props.value}</p>
+    </div>
+  );
+};
+
+const EmptyState: React.FC<{}> = (props) => {
+  return (
+    <div className='flex flex-col gap-[53px] justify-center items-center text-center h-full'>
+      <Image src={EmptyImg} width={130} height={136} alt='emptyStateImg'></Image>
+      <div>
+        <p className='text-[24px] font-bold text-dark-blue mb-5'>There is no feedback yet.</p>
+        <p className='text-[16px] text-gray-custom'>Got a suggestion? Found a bug that needs to be squashed?</p>
+        <p className='text-[16px] text-gray-custom mb-[50px]'>We love hearing about new ideas to improve our app.</p>
+        <Button text='+ Add Feedback' color='violet' onClick={() => {}} />
+      </div>
     </div>
   );
 };
