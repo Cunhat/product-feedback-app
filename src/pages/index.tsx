@@ -26,7 +26,7 @@ const Home: NextPage = () => {
         </div>
         <div className=' p-[24px] bg-white rounded-[10px] flex gap-[8px] flex-wrap'>
           {FILTERS.map((filter) => (
-            <Tag key={filter} text={filter} isActive={false}></Tag>
+            <Tag disabled={false} key={filter} text={filter} isActive={false}></Tag>
           ))}
         </div>
         <div className='bg-white rounded-[10px] px-6 pt-[19px] pb-6'>
@@ -41,22 +41,24 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className='flex flex-col flex-1 h-full gap-[20px]'>
+      <div className='flex flex-col flex-1 h-full gap-[20px] pb-5'>
         <div className='h-[72px] bg-dark-blue-2 rounded-[10px] mb-1'></div>
 
         {Data.productRequests.length > 0 ? (
-          Data.productRequests.map((elem) => {
-            return (
-              <ProductRequest
-                title={elem.title}
-                description={elem.description}
-                category={elem.category}
-                upvotes={elem.upvotes}
-                comments={elem.comments?.length || 0}
-                key={elem.id}
-              ></ProductRequest>
-            );
-          })
+          <div className='flex-1 flex flex-col overflow-auto gap-4'>
+            {Data.productRequests.map((elem) => {
+              return (
+                <ProductRequest
+                  title={elem.title}
+                  description={elem.description}
+                  category={elem.category}
+                  upvotes={elem.upvotes}
+                  comments={elem.comments?.length || 0}
+                  key={elem.id}
+                ></ProductRequest>
+              );
+            })}{' '}
+          </div>
         ) : (
           <div className='flex-1 bg-white rounded-[10px] max-h-[600px]'>
             <EmptyState />
