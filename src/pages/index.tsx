@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { Button } from '../components/Button';
 import Link from 'next/link';
 import { UpVote } from '../components/UpVote';
+import BulbImg from '../assets/icons/bulb.svg';
 
 import Data from '..//data.json';
 
@@ -42,7 +43,14 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className='flex flex-col flex-1 h-full gap-[20px] pb-5'>
-        <div className='h-[72px] bg-dark-blue-2 rounded-[10px] mb-1'></div>
+        <div className='h-[72px] bg-dark-blue-2 rounded-[10px] mb-1 flex px-4 items-center'>
+          <Image src={BulbImg} alt='Bulb' width={23} height={24} />
+          <p className='text-white font-bold text-lg ml-4 text-4.5'>{Data.productRequests.length} Suggestions</p>
+          <span className='text-light-gray-3 text-3.5 ml-10'>Sort by: <span className='text-light-gray-3 font-bold text-3.5'>Most Upvotes</span></span>
+          <div className='ml-auto'>
+            <Button text='+ Add Feedback' color='violet' onClick={() => {}} />
+          </div>
+        </div>
 
         {Data.productRequests.length > 0 ? (
           <div className='flex-1 flex flex-col overflow-auto gap-4'>
