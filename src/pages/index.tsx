@@ -46,7 +46,9 @@ const Home: NextPage = () => {
         <div className='h-[72px] bg-dark-blue-2 rounded-[10px] mb-1 flex px-4 items-center'>
           <Image src={BulbImg} alt='Bulb' width={23} height={24} />
           <p className='text-white font-bold text-lg ml-4 text-4.5'>{Data.productRequests.length} Suggestions</p>
-          <span className='text-light-gray-3 text-3.5 ml-10'>Sort by: <span className='text-light-gray-3 font-bold text-3.5'>Most Upvotes</span></span>
+          <span className='text-light-gray-3 text-3.5 ml-10'>
+            Sort by: <span className='text-light-gray-3 font-bold text-3.5'>Most Upvotes</span>
+          </span>
           <div className='ml-auto'>
             <Button text='+ Add Feedback' color='violet' onClick={() => {}} />
           </div>
@@ -63,6 +65,7 @@ const Home: NextPage = () => {
                   upvotes={elem.upvotes}
                   comments={elem.comments?.length || 0}
                   key={elem.id}
+                  productRequestId={elem.id}
                 ></ProductRequest>
               );
             })}{' '}
@@ -117,12 +120,13 @@ type ProductRequestProps = {
   category: string;
   upvotes: number;
   comments: number;
+  productRequestId: number;
 };
 
 const ProductRequest: React.FC<ProductRequestProps> = (props) => {
   return (
-    <Link href='/'>
-      <div className='flex py-7 px-8 bg-white rounded-[10px]'>
+    <Link href={`/productRequest/${props.productRequestId}`}>
+      <div className='flex py-7 px-8 bg-white rounded-[10px] cursor-pointer'>
         <div className='mr-5'>
           <UpVote number={props.upvotes} active={false} />
         </div>
