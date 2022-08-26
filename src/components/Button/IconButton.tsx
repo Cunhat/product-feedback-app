@@ -11,7 +11,7 @@ type IconButtonProps = {
 };
 
 export const IconButton: React.FC<PropsWithChildren<IconButtonProps>> = (props) => {
-  const color = props.isSecondary ? 'bg-white' : 'bg-dark-blue';
+  const color = props.isSecondary ? 'bg-transparent' : 'bg-dark-blue';
 
   const textColor = props.isSecondary ? 'text-dark-blue' : 'text-white';
 
