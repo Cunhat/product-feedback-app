@@ -21,8 +21,9 @@ module.exports = {
         'hover-blue': '#7C91F9',
         'hover-dark-blue': '#656EA3',
         'hover-red': '#E98888',
-        'huehue': '#647196',
+        huehue: '#647196',
         'background-custom': '#F7F8FD',
+        separator: '#8C92B3',
       },
       fontFamily: {
         regular: 'Jost Regular',
@@ -30,8 +31,8 @@ module.exports = {
         semiBold: 'Jost SemiBold',
       },
       backgroundImage: {
-        "desktop-gradient": "url('/img/desktop/background-header.png')",
-      }
+        'desktop-gradient': "url('/img/desktop/background-header.png')",
+      },
     },
   },
   plugins: [],
