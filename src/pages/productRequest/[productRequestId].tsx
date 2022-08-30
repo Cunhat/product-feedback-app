@@ -30,7 +30,7 @@ const ProductRequest: NextPage<ProductRequest> = (props) => {
   }
 
   return (
-    <div className='h-screen justify-center flex pt-20 bg-background-custom'>
+    <div className='h-screen justify-center flex pt-20 bg-background-custom overflow-auto'>
       <div className='max-w-[700px] flex flex-col flex-1 gap-6'>
         <div className='flex justify-between'>
           <IconButton text='Go back' onClick={() => router.back()} isSecondary />
@@ -51,7 +51,7 @@ const ProductRequest: NextPage<ProductRequest> = (props) => {
             commentInfo.comments.map((comment, index) => {
               return (
                 <>
-                  <Comment content={comment.content} user={comment.user} key={comment.id} />
+                  <Comment content={comment.content} user={comment.user} key={comment.id} replies={comment.replies} />
                   {index !== commentInfo.comments.length - 1 && <div className='h-[1px] bg-separator my-8' />}
                 </>
               );
@@ -73,7 +73,8 @@ type User = {
 type CommentProps = {
   content: string;
   user: User;
-  replies?: Array<CommentProps>;
+  replies: Array<any>;
+  replyingTo?: string | undefined;
 };
 
 const Comment: React.FC<CommentProps> = (props) => {
@@ -88,7 +89,17 @@ const Comment: React.FC<CommentProps> = (props) => {
         <span className='ml-auto text-custom-blue font-bold text-xs cursor-pointer underline'>Reply</span>
       </div>
       <div className='mt-[17px] ml-[72px]'>
-        <p className='text-gray-custom font-regular text-[15px]'>{props.content}</p>
+        <span className='text-gray-custom font-regular text-[15px]'>{props.replyingTo !== undefined && <span className='text-custom-violet font-bold mr-2'>@{props?.replyingTo}</span>}{props.content}</span>
+      </div>
+      <div className='ml-[45px] mt-7'>
+        {props.replies?.length > 0 &&
+          props.replies
+            //?.filter((reply) => reply.replyingTo === props.user.username)
+            .map((reply, index) => {
+              return (
+                <Comment replyingTo={reply.replyingTo} content={reply.content} user={reply.user} replies={reply.replies} key={'reply' + props.user.username + index} />
+              );
+            })}
       </div>
     </div>
   );
