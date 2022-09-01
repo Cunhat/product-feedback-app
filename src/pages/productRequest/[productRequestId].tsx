@@ -52,10 +52,18 @@ const ProductRequest: NextPage<ProductRequest> = (props) => {
               return (
                 <>
                   <Comment content={comment.content} user={comment.user} key={comment.id} replies={comment.replies} />
-                  {index !== commentInfo.comments.length - 1 && <div className='h-[1px] bg-separator my-8' />}
+                  {index !== commentInfo.comments.length - 1 && <div className='h-[1px] bg-separator my-8 opacity-25' />}
                 </>
               );
             })}
+        </div>
+        <div className='flex flex-col rounded-sm bg-white px-8 py-6'>
+          <p className='font-bold text-dark-blue text-[18px] mb-6'>Add Comment</p>
+          <textarea maxLength={250} style={{ resize: 'none' }} className='bg-stone h-20 px-6 py-4 font-regular text-[15px] text-dark-blue rounded-[5px]' />
+          <div className='flex justify-between items-center mt-4'>
+            <p className='text-[15px] text-dark-blue'>255 characters left</p>
+            <Button color='violet' text='Post Comment' onClick={() => {}} />
+          </div>
         </div>
       </div>
     </div>
@@ -79,27 +87,41 @@ type CommentProps = {
 
 const Comment: React.FC<CommentProps> = (props) => {
   return (
-    <div>
-      <div className='flex gap-8'>
+    <div className='flex'>
+      <div className='flex flex-col items-center gap-[23px] min-w-10'>
         <Image src={Img} alt='userImage' width={40} height={40} className='rounded-full' />
-        <div className='flex flex-col'>
-          <span className='text-dark-blue font-bold text-sm'>{props.user.name}</span>
-          <span className='text-gray-custom font-regular text-sm'>@{props.user.username}</span>
+        {props.replies?.length > 0 && <div className='bg-[#979797] h-full w-[0.5px] flex-1 opacity-10'></div>}
+      </div>
+      <div className='flex-1 ml-7'>
+        <div className='flex gap-8'>
+          <div className='flex flex-col'>
+            <span className='text-dark-blue font-bold text-sm'>{props.user.name}</span>
+            <span className='text-gray-custom font-regular text-sm'>@{props.user.username}</span>
+          </div>
+          <span className='ml-auto text-custom-blue font-bold text-xs cursor-pointer underline'>Reply</span>
         </div>
-        <span className='ml-auto text-custom-blue font-bold text-xs cursor-pointer underline'>Reply</span>
-      </div>
-      <div className='mt-[17px] ml-[72px]'>
-        <span className='text-gray-custom font-regular text-[15px]'>{props.replyingTo !== undefined && <span className='text-custom-violet font-bold mr-2'>@{props?.replyingTo}</span>}{props.content}</span>
-      </div>
-      <div className='ml-[45px] mt-7'>
-        {props.replies?.length > 0 &&
-          props.replies
-            //?.filter((reply) => reply.replyingTo === props.user.username)
-            .map((reply, index) => {
-              return (
-                <Comment replyingTo={reply.replyingTo} content={reply.content} user={reply.user} replies={reply.replies} key={'reply' + props.user.username + index} />
-              );
-            })}
+        <div className='mt-[17px] ml-[0px]'>
+          <span className='text-gray-custom font-regular text-[15px]'>
+            {props.replyingTo !== undefined && <span className='text-custom-violet font-bold mr-2'>@{props?.replyingTo}</span>}
+            {props.content}
+          </span>
+        </div>
+        <div className='ml-[0px] mt-7'>
+          {props.replies?.length > 0 &&
+            props.replies
+              //?.filter((reply) => reply.replyingTo === props.user.username)
+              .map((reply, index) => {
+                return (
+                  <Comment
+                    replyingTo={reply.replyingTo}
+                    content={reply.content}
+                    user={reply.user}
+                    replies={reply.replies}
+                    key={'reply' + props.user.username + index}
+                  />
+                );
+              })}
+        </div>
       </div>
     </div>
   );
