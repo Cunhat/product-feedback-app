@@ -4,6 +4,7 @@ type ButtonProps = {
   text: string;
   onClick: () => void;
   color: 'violet' | 'blue' | 'darkBlue' | 'red';
+  width?: string;
 };
 
 export const Button: React.FC<PropsWithChildren<ButtonProps>> = (props) => {
@@ -39,7 +40,9 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = (props) => {
 
   return (
     <button
-      className={`rounded-[10px] ${getColor(props.color)}  w-40 h-11 text-white ${getHoverColor(props.color)}`}
+      className={`rounded-[10px] ${getColor(props.color)} ${props.width ? props.width : 'w-40'}  h-11 text-white ${getHoverColor(
+        props.color,
+      )}`}
       onClick={props.onClick}
     >
       <p className='font-bold text-sm leading-5'>{props.text}</p>
