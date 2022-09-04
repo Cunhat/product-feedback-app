@@ -21,7 +21,6 @@ module.exports = {
         'hover-blue': '#7C91F9',
         'hover-dark-blue': '#656EA3',
         'hover-red': '#E98888',
-        huehue: '#647196',
         'background-custom': '#F7F8FD',
         separator: '#8C92B3',
       },

@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { Button } from '../components/Button';
 import BulbImg from '../assets/icons/bulb.svg';
 import { ProductRequest } from '../components/ProductRequest';
+import { useRouter } from 'next/router'
 
 import Data from '..//data.json';
 
@@ -16,6 +17,7 @@ const comments = [];
 
 const Home: NextPage = () => {
   const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }]);
+  const router = useRouter();
 
   return (
     <div className='flex gap-[30px] px-[165px] pt-[94px] w-full h-screen bg-stone'>
@@ -48,7 +50,7 @@ const Home: NextPage = () => {
             Sort by: <span className='text-light-gray-3 font-bold text-3.5'>Most Upvotes</span>
           </span>
           <div className='ml-auto'>
-            <Button text='+ Add Feedback' color='violet' onClick={() => {}} />
+            <Button text='+ Add Feedback' color='violet' onClick={() => router.push('/createFeedback')} />
           </div>
         </div>
 
