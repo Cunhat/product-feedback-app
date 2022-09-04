@@ -52,8 +52,8 @@ const ProductRequest: NextPage<ProductRequest> = (props) => {
             commentInfo.comments.map((comment, index) => {
               return (
                 <>
-                  <Comment content={comment.content} user={comment.user} key={comment.id} replies={comment.replies} />
-                  {index !== commentInfo.comments.length - 1 && <div className='h-[1px] bg-separator my-8 opacity-25' />}
+                  <Comment content={comment.content} user={comment.user} key={comment.id+index} replies={comment.replies} />
+                  {index !== commentInfo.comments.length - 1 && <div key={index} className='h-[1px] bg-separator my-8 opacity-25' />}
                 </>
               );
             })}
@@ -119,7 +119,6 @@ const Comment: React.FC<CommentProps> = (props) => {
         <div className='ml-[0px] mt-7'>
           {props.replies?.length > 0 &&
             props.replies
-              //?.filter((reply) => reply.replyingTo === props.user.username)
               .map((reply, index) => {
                 return (
                   <Comment
