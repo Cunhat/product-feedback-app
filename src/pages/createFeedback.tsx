@@ -3,20 +3,26 @@ import type { NextPage } from 'next';
 import { trpc } from '../utils/trpc';
 import { Button } from '../components/Button';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 import NewFeedbackImg from '../assets/icons/icon-new-feedback.svg';
 import { Select } from '../components/Select';
+import { IconButton } from '../components/Button';
 
 const CreateFeedback: NextPage = () => {
   const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }]);
   const selectRef = useRef(null);
+  const router = useRouter();
 
   const addFeedbackHandler = () => {
     console.log(selectRef.current.value);
   };
 
   return (
-    <div className='bg-stone flex justify-center items-center h-screen w-screen'>
+    <div className='bg-stone flex flex-col justify-center items-center h-screen w-screen'>
+      <div className='w-[540px] mb-[53px]'>
+        <IconButton onlyLabel isSecondary text='Go Back' onClick={() => router.back()} />
+      </div>
       <div className='flex flex-col w-[540px] bg-white rounded-[10px] h-fit px-11 pb-10 pt-[52px] relative'>
         <div className='absolute top-[-25px] left-[42px]'>
           <Image src={NewFeedbackImg} alt='feedback' width={56} height={56} />
