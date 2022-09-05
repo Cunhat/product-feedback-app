@@ -5,17 +5,19 @@ import { Button } from '../components/Button';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-import NewFeedbackImg from '../assets/icons/icon-new-feedback.svg';
+import EditFeedbackImg from '../assets/icons/icon-edit-feedback.svg';
 import { Select } from '../components/Select';
 import { IconButton } from '../components/Button';
 
-const CreateFeedback: NextPage = () => {
+const EditFeedback: NextPage = () => {
   const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }]);
   const selectRef = useRef(null);
+  const updateRef = useRef(null);
   const router = useRouter();
 
   const addFeedbackHandler = () => {
     console.log(selectRef.current.value);
+    console.log(updateRef.current.value);
   };
 
   return (
@@ -25,9 +27,9 @@ const CreateFeedback: NextPage = () => {
       </div>
       <div className='flex flex-col w-[540px] bg-white rounded-[10px] h-fit px-11 pb-10 pt-[52px] relative'>
         <div className='absolute top-[-25px] left-[42px]'>
-          <Image src={NewFeedbackImg} alt='feedback' width={56} height={56} />
+          <Image src={EditFeedbackImg} alt='feedback' width={56} height={56} />
         </div>
-        <h1 className='font-bold text-dark-blue text-2xl mb-11'>Create New Feedback</h1>
+        <h1 className='font-bold text-dark-blue text-2xl mb-[75px]'>Editing ‘Add a dark theme option’</h1>
         <div className='flex flex-col gap-11'>
           <div>
             <h1 className='font-bold text-dark-blue text-small mb-[2px]'>Feedback Title</h1>
@@ -46,6 +48,17 @@ const CreateFeedback: NextPage = () => {
             />
           </div>
           <div>
+            <h1 className='font-bold text-dark-blue text-small mb-[2px]'>Update Status</h1>
+            <h2 className='font-regular text-gray-custom text-small mb-4'>Change feature state</h2>
+            <Select
+              ref={updateRef}
+              value={[
+                { label: 'teste', id: '123' },
+                { label: 'teste123', id: '1234' },
+              ]}
+            />
+          </div>
+          <div>
             <h1 className='font-bold text-dark-blue text-small mb-[2px]'>Feedback Detail</h1>
             <h2 className='font-regular text-gray-custom text-small mb-4'>
               Include any specific comments on what should be improved, added, etc.
@@ -56,9 +69,12 @@ const CreateFeedback: NextPage = () => {
               className='bg-stone w-full h-20 px-6 py-4 font-regular text-[15px] text-dark-blue rounded-[5px] flex-1'
             />
           </div>
-          <div className='flex gap-4 justify-end mt-2'>
-            <Button color='darkBlue' width='w-[93px]' text='Cancel' onClick={() => {}} />
-            <Button color='violet' text='Add Feedback' onClick={addFeedbackHandler} />
+          <div className='flex gap-4 mt-2'>
+            <Button color='red' width='w-[93px]' text='Delete' onClick={() => {}} />
+            <div  className='flex gap-4 ml-auto'>
+              <Button color='darkBlue' width='w-[93px]' text='Cancel' onClick={() => {}} />
+              <Button color='violet' text='Add Feedback' onClick={addFeedbackHandler} />
+            </div>
           </div>
         </div>
       </div>
@@ -66,4 +82,4 @@ const CreateFeedback: NextPage = () => {
   );
 };
 
-export default CreateFeedback;
+export default EditFeedback;
