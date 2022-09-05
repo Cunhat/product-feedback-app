@@ -1,12 +1,19 @@
+import React, { useRef } from 'react';
 import type { NextPage } from 'next';
 import { trpc } from '../utils/trpc';
 import { Button } from '../components/Button';
 import Image from 'next/image';
 
 import NewFeedbackImg from '../assets/icons/icon-new-feedback.svg';
+import { Select } from '../components/Select';
 
 const CreateFeedback: NextPage = () => {
   const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }]);
+  const selectRef = useRef(null);
+
+  const addFeedbackHandler = () => {
+    console.log(selectRef.current.value);
+  };
 
   return (
     <div className='bg-stone flex justify-center items-center h-screen w-screen'>
@@ -24,7 +31,13 @@ const CreateFeedback: NextPage = () => {
           <div>
             <h1 className='font-bold text-dark-blue text-small mb-[2px]'>Category</h1>
             <h2 className='font-regular text-gray-custom text-small mb-4'>Choose a category for your feedback</h2>
-            <input className='border-none bg-stone rounded-sm px-4 py-3 w-full font-regular text-[15px] text-dark-blue ' type='text' />
+            <Select
+              ref={selectRef}
+              value={[
+                { label: 'teste', id: '123' },
+                { label: 'teste123', id: '1234' },
+              ]}
+            />
           </div>
           <div>
             <h1 className='font-bold text-dark-blue text-small mb-[2px]'>Feedback Detail</h1>
@@ -39,7 +52,7 @@ const CreateFeedback: NextPage = () => {
           </div>
           <div className='flex gap-4 justify-end mt-2'>
             <Button color='darkBlue' width='w-[93px]' text='Cancel' onClick={() => {}} />
-            <Button color='violet' text='Add Feedback' onClick={() => {}} />
+            <Button color='violet' text='Add Feedback' onClick={addFeedbackHandler} />
           </div>
         </div>
       </div>
