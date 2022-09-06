@@ -34,7 +34,7 @@ const ProductRequest: NextPage<ProductRequest> = (props) => {
     <div className='h-screen justify-center flex pt-20 bg-background-custom overflow-auto'>
       <div className='max-w-[700px] flex flex-col flex-1 gap-6'>
         <div className='flex justify-between'>
-          <IconButton text='Go back' onClick={() => router.back()} isSecondary />
+          <IconButton onlyLabel text='Go back' onClick={() => router.back()} isSecondary />
           <Button color='blue' text='Edit Feedback' onClick={() => router.push('/editFeedback')} />
         </div>
         <ProductRequestComponent
