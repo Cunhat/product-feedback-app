@@ -6,10 +6,55 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider = "postgresql"
     url      = env("DATABASE_URL")
 }
 
-model Example {
+model User {
     id String @id @default(cuid())
+    username String @unique
+    name String
+    image String
+    productRequest ProductRequest[]
+    comment Comment[]
+}
+
+model Category {
+    id String @id @default(cuid())
+    name String @unique
+    productRequest ProductRequest[]
+}
+model Status {
+    id String @id @default(cuid())
+    name String @unique
+    productRequest ProductRequest[]
+}
+model Comment {
+    id String @id @default(cuid())
+    content String
+    
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+
+    ProductRequest   ProductRequest   @relation(fields: [productRequestId], references: [id])
+    productRequestId String
+
+    replies Comment[] @relation("comment_replies")
+    parent   Comment?  @relation("comment_replies", fields: [parentId], references: [id])
+    parentId String?
+}
+
+model ProductRequest {
+    id String @id @default(cuid())
+    title String
+    description String
+    image String
+    upVotes Int
+    category Category @relation(fields: [categoryId], references: [id])
+    categoryId String
+    status Status @relation(fields: [statusId], references: [id])
+    statusId String
+    user User @relation(fields: [userId], references: [id])
+    userId String
+    comments Comment[]
 }
