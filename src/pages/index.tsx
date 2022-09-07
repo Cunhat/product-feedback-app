@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { Button } from '../components/Button';
 import BulbImg from '../assets/icons/bulb.svg';
 import { ProductRequest } from '../components/ProductRequest';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 
 import Data from '..//data.json';
 
@@ -16,8 +16,12 @@ const FILTERS = ['all', 'frontend', 'backend', 'mobile', 'UX'];
 const comments = [];
 
 const Home: NextPage = () => {
-  const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }]);
+  const category = trpc.useQuery(['category.getAllCategories']);
+  const status = trpc.useQuery(['status.getAllStatus']);
   const router = useRouter();
+
+  console.log(category.data);
+  console.log(status.data);
 
   return (
     <div className='flex gap-[30px] px-[165px] pt-[94px] w-full h-screen bg-stone'>
