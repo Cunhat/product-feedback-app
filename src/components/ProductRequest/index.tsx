@@ -12,7 +12,7 @@ type ProductRequestProps = {
   category: string;
   upvotes: number;
   comments: number;
-  productRequestId: number;
+  productRequestId: string;
 };
 
 export const ProductRequest: React.FC<ProductRequestProps> = (props) => {
