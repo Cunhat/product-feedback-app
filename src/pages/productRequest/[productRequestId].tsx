@@ -9,24 +9,19 @@ import { ProductRequest as ProductRequestComponent } from '../../components/Prod
 import Img from '../../assets/user-images/image-anne.jpg';
 
 import Data from '../../data.json';
+import { trpc } from '../../utils/trpc';
+import { getCommentById } from '../api/productRequests';
+import { inferQueryOutput } from '../../utils/trpc';
 
 type ProductRequest = {
-  commentInfo: {
-    id: number;
-    title: string;
-    category: string;
-    upvotes: number;
-    status: string;
-    description: string;
-    comments: [];
-  };
+  comment: inferQueryOutput<'productRequest.getProductRequestsById'>;
 };
 
 const ProductRequest: NextPage<ProductRequest> = (props) => {
-  const commentInfo = props.commentInfo;
+  const commentInfo = props.comment;
   const router = useRouter();
 
-  if (commentInfo === undefined) {
+  if (commentInfo === null || commentInfo === undefined) {
     return <h1>Loading...</h1>;
   }
 
@@ -38,26 +33,27 @@ const ProductRequest: NextPage<ProductRequest> = (props) => {
           <Button color='blue' text='Edit Feedback' onClick={() => router.push('/editFeedback')} />
         </div>
         <ProductRequestComponent
-          title={commentInfo?.title}
-          description={commentInfo.description}
-          category={commentInfo.category}
-          upvotes={commentInfo.upvotes}
-          comments={commentInfo.comments?.length || 0}
-          key={commentInfo.id}
-          productRequestId={commentInfo.id}
+          title={commentInfo?.title!}
+          description={commentInfo?.description!}
+          category={commentInfo?.category.name!}
+          upvotes={commentInfo?.upVotes!}
+          comments={commentInfo?.comments?.length || 0}
+          key={commentInfo?.id}
+          productRequestId={commentInfo?.id!}
         />
-        <div className='bg-white rounded-md pt-6 pb-[33px] px-8'>
-          <p className='text-dark-blue font-bold text-lg mb-7'>Comments</p>
-          {commentInfo.comments?.length > 0 &&
-            commentInfo.comments.map((comment, index) => {
+        {commentInfo?.comments?.length > 0 && (
+          <div className='bg-white rounded-md pt-6 pb-[33px] px-8'>
+            <p className='text-dark-blue font-bold text-lg mb-7'>Comments</p>
+            {commentInfo?.comments.map((comment, index) => {
               return (
                 <>
-                  <Comment content={comment.content} user={comment.user} key={comment.id+index} replies={comment.replies} />
+                  <Comment content={comment.content} user={comment.user} key={comment.id + index} replies={comment.replies} />
                   {index !== commentInfo.comments.length - 1 && <div key={index} className='h-[1px] bg-separator my-8 opacity-25' />}
                 </>
               );
             })}
-        </div>
+          </div>
+        )}
         <div className='flex flex-col rounded-sm bg-white px-8 py-6'>
           <p className='font-bold text-dark-blue text-[18px] mb-6'>Add Comment</p>
           <textarea
@@ -78,7 +74,7 @@ const ProductRequest: NextPage<ProductRequest> = (props) => {
 export default ProductRequest;
 
 type User = {
-  image: string;
+  image: string | null;
   name: string;
   username: string;
 };
@@ -118,18 +114,17 @@ const Comment: React.FC<CommentProps> = (props) => {
         {addReply && <AddReply />}
         <div className='ml-[0px] mt-7'>
           {props.replies?.length > 0 &&
-            props.replies
-              .map((reply, index) => {
-                return (
-                  <Comment
-                    replyingTo={reply.replyingTo}
-                    content={reply.content}
-                    user={reply.user}
-                    replies={reply.replies}
-                    key={'reply' + props.user.username + index}
-                  />
-                );
-              })}
+            props.replies.map((reply, index) => {
+              return (
+                <Comment
+                  replyingTo={reply.replyingTo}
+                  content={reply.content}
+                  user={reply.user}
+                  replies={reply.replies}
+                  key={'reply' + props.user.username + index}
+                />
+              );
+            })}
         </div>
       </div>
     </div>
@@ -160,6 +155,13 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetServerSideProps = async ({ params }) => {
-  const commentInfo = Data.productRequests.find((elem) => elem.id === parseInt(params.productRequestId));
-  return { props: { commentInfo } };
+  const comment = await getCommentById(params?.productRequestId as string);
+
+  if (comment === null) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return { props: { comment } };
 };

@@ -18,7 +18,17 @@ export const productRequestRouter = createRouter()
         where: {
           id: input.id,
         },
-        include: { category: true, status: true, user: true, comments: true },
+        include: {
+          category: true,
+          status: true,
+          user: true,
+          comments: {
+            include: {
+              user: true,
+              replies: true
+            },
+          },
+        },
       });
     },
   });

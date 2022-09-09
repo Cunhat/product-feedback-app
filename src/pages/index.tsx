@@ -17,10 +17,6 @@ const Home: NextPage = () => {
   const products = trpc.useQuery(['productRequest.getAllProductRequests']);
   const router = useRouter();
 
-  console.log('render');
-
-  console.log(products);
-
   return (
     <div className='flex gap-[30px] px-[165px] pt-[94px] w-full h-screen bg-stone'>
       <div className=' w-[255px] h-full flex flex-col gap-[24px]'>

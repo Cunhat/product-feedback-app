@@ -10,14 +10,12 @@ import { Select } from '../components/Select';
 import { IconButton } from '../components/Button';
 
 const EditFeedback: NextPage = () => {
-  const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }]);
   const selectRef = useRef(null);
   const updateRef = useRef(null);
   const router = useRouter();
 
   const addFeedbackHandler = () => {
-    console.log(selectRef.current.value);
-    console.log(updateRef.current.value);
+  
   };
 
   return (

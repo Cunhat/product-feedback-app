@@ -7,7 +7,8 @@ type SelectProps = {
   }>;
 };
 
-export const Select = React.forwardRef((props: SelectProps, ref) => {
+// eslint-disable-next-line react/display-name
+export const Select = React.forwardRef((props: SelectProps, ref: any) => {
   return (
     <>
       <select
