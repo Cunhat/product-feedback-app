@@ -97,8 +97,8 @@ const Comment: React.FC<CommentProps> = (props) => {
       <div className='flex-1 ml-7'>
         <div className='flex gap-8'>
           <div className='flex flex-col'>
-            <span className='text-dark-blue font-bold text-sm'>{props.comment.user.name}</span>
-            <span className='text-gray-custom font-regular text-sm'>@{props.comment.user.username}</span>
+            <span className='text-dark-blue font-bold text-sm'>{props?.comment?.user?.name || ''}</span>
+            <span className='text-gray-custom font-regular text-sm'>@{props?.comment?.user?.username || ''}</span>
           </div>
           <span className='ml-auto text-custom-blue font-bold text-xs cursor-pointer underline' onClick={() => setAddReply(!addReply)}>
             Reply
