@@ -5,7 +5,30 @@ export const productRequestRouter = createRouter()
   .query('getAllProductRequests', {
     async resolve({ ctx }) {
       return await ctx.prisma.productRequest.findMany({
-        include: { category: true, status: true, user: true, comments: true },
+        include: {
+          category: true,
+          status: true,
+          user: true,
+          comments: {
+            include: {
+              user: true,
+              parent: {
+                include: {
+                  user: true,
+                },
+              },
+              replies: {
+                include: {
+                  parent: {
+                    include: {
+                      user: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       });
     },
   })
@@ -22,12 +45,7 @@ export const productRequestRouter = createRouter()
           category: true,
           status: true,
           user: true,
-          comments: {
-            include: {
-              user: true,
-              replies: true
-            },
-          },
+          comments: true,
         },
       });
     },

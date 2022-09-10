@@ -7,6 +7,30 @@ export const getCommentById = async (id: string) => {
     where: {
       id: id,
     },
-    include: { category: true, status: true, user: true, comments: true },
+    include: {
+      category: true,
+      status: true,
+      user: true,
+      comments: {
+        include: {
+          user: true,
+          parent: {
+            include: {
+              user: true,
+            },
+          },
+          replies: {
+            include: {
+              user: true,
+              parent: {
+                include: {
+                  user: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   });
 };

@@ -24,3 +24,14 @@ export type inferMutationOutput<
 export type inferMutationInput<
   TRouteKey extends keyof AppRouter["_def"]["mutations"],
 > = inferProcedureInput<AppRouter["_def"]["mutations"][TRouteKey]>;
+
+
+export type User = inferQueryOutput<'user.getAllUsers'>[number];
+
+export type Comment = inferQueryOutput<'commentRequest.getAllComments'>[number];
+
+export type CommentWithReplies = Comment & {
+  replies: Array<CommentWithReplies>;
+};
+
+export type ProductRequest = inferQueryOutput<'productRequest.getAllProductRequests'>[number];

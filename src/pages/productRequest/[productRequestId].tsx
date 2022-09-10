@@ -9,17 +9,25 @@ import { ProductRequest as ProductRequestComponent } from '../../components/Prod
 import Img from '../../assets/user-images/image-anne.jpg';
 
 import Data from '../../data.json';
-import { trpc } from '../../utils/trpc';
+import { Comment, ProductRequest } from '../../utils/trpc';
 import { getCommentById } from '../api/productRequests';
 import { inferQueryOutput } from '../../utils/trpc';
 
-type ProductRequest = {
-  comment: inferQueryOutput<'productRequest.getProductRequestsById'>;
+import formComments from '..//..//utils//formatComments';
+
+type ProductRequestProps = {
+  productRequest: ProductRequest;
 };
 
-const ProductRequest: NextPage<ProductRequest> = (props) => {
-  const commentInfo = props.comment;
+const ProductRequest: NextPage<ProductRequestProps> = (props) => {
+  const commentInfo = props.productRequest;
   const router = useRouter();
+
+  let formattedComments = new Array<Comment>();
+
+  if (commentInfo !== null && commentInfo !== undefined) {
+    formattedComments = formComments(commentInfo?.comments);
+  }
 
   if (commentInfo === null || commentInfo === undefined) {
     return <h1>Loading...</h1>;
@@ -41,13 +49,13 @@ const ProductRequest: NextPage<ProductRequest> = (props) => {
           key={commentInfo?.id}
           productRequestId={commentInfo?.id!}
         />
-        {commentInfo?.comments?.length > 0 && (
+        {formattedComments?.length > 0 && (
           <div className='bg-white rounded-md pt-6 pb-[33px] px-8'>
             <p className='text-dark-blue font-bold text-lg mb-7'>Comments</p>
-            {commentInfo?.comments.map((comment, index) => {
+            {formattedComments?.map((comment, index) => {
               return (
                 <>
-                  <Comment content={comment.content} user={comment.user} key={comment.id + index} replies={comment.replies} />
+                  <Comment key={comment.id + index} comment={comment} />
                   {index !== commentInfo.comments.length - 1 && <div key={index} className='h-[1px] bg-separator my-8 opacity-25' />}
                 </>
               );
@@ -73,17 +81,8 @@ const ProductRequest: NextPage<ProductRequest> = (props) => {
 
 export default ProductRequest;
 
-type User = {
-  image: string | null;
-  name: string;
-  username: string;
-};
-
 type CommentProps = {
-  content: string;
-  user: User;
-  replies: Array<any>;
-  replyingTo?: string | undefined;
+  comment: Comment;
 };
 
 const Comment: React.FC<CommentProps> = (props) => {
@@ -93,13 +92,13 @@ const Comment: React.FC<CommentProps> = (props) => {
     <div className='flex'>
       <div className='flex flex-col items-center gap-[23px] min-w-10'>
         <Image src={Img} alt='userImage' width={40} height={40} className='rounded-full' />
-        {props.replies?.length > 0 && <div className='bg-[#979797] h-full w-[0.5px] flex-1 opacity-10'></div>}
+        {props?.comment?.replies?.length > 0 && <div className='bg-[#979797] h-full w-[0.5px] flex-1 opacity-10'></div>}
       </div>
       <div className='flex-1 ml-7'>
         <div className='flex gap-8'>
           <div className='flex flex-col'>
-            <span className='text-dark-blue font-bold text-sm'>{props.user.name}</span>
-            <span className='text-gray-custom font-regular text-sm'>@{props.user.username}</span>
+            <span className='text-dark-blue font-bold text-sm'>{props.comment.user.name}</span>
+            <span className='text-gray-custom font-regular text-sm'>@{props.comment.user.username}</span>
           </div>
           <span className='ml-auto text-custom-blue font-bold text-xs cursor-pointer underline' onClick={() => setAddReply(!addReply)}>
             Reply
@@ -107,23 +106,18 @@ const Comment: React.FC<CommentProps> = (props) => {
         </div>
         <div className='mt-[17px] ml-[0px]'>
           <span className='text-gray-custom font-regular text-[15px]'>
-            {props.replyingTo !== undefined && <span className='text-custom-violet font-bold mr-2'>@{props?.replyingTo}</span>}
-            {props.content}
+            {props?.comment?.parent?.user.username && (
+              <span className='text-custom-violet font-bold mr-2'>@{props?.comment?.parent?.user.username}</span>
+            )}
+            {props.comment?.content}
           </span>
         </div>
         {addReply && <AddReply />}
         <div className='ml-[0px] mt-7'>
-          {props.replies?.length > 0 &&
-            props.replies.map((reply, index) => {
-              return (
-                <Comment
-                  replyingTo={reply.replyingTo}
-                  content={reply.content}
-                  user={reply.user}
-                  replies={reply.replies}
-                  key={'reply' + props.user.username + index}
-                />
-              );
+          {props.comment?.replies?.length > 0 &&
+            props.comment?.replies.map((reply, index) => {
+              //@ts-ignore
+              return <Comment comment={reply} key={'reply' + reply.id + index} />;
             })}
         </div>
       </div>
@@ -155,13 +149,13 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetServerSideProps = async ({ params }) => {
-  const comment = await getCommentById(params?.productRequestId as string);
+  const productRequest = await getCommentById(params?.productRequestId as string);
 
-  if (comment === null) {
+  if (productRequest === null) {
     return {
       notFound: true,
     };
   }
 
-  return { props: { comment } };
+  return { props: { productRequest } };
 };
