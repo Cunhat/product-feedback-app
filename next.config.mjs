@@ -17,5 +17,5 @@ export default defineNextConfig({
   swcMinify: true,
   images: {
     dangerouslyAllowSVG: true,
-  },
+  }
 });

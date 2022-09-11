@@ -138,17 +138,17 @@ const AddReply: React.FC = () => {
   );
 };
 
-export async function getStaticPaths() {
-  const products = Data.productRequests;
+// export async function getStaticPaths() {
+//   const products = Data.productRequests;
 
-  const paths = products.map((product) => ({
-    params: { productRequestId: product.id.toString() },
-  }));
+//   const paths = products.map((product) => ({
+//     params: { productRequestId: product.id.toString() },
+//   }));
 
-  return { paths, fallback: true };
-}
+//   return { paths, fallback: true };
+// }
 
-export const getStaticProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const productRequest = await getCommentById(params?.productRequestId as string);
 
   if (productRequest === null) {
@@ -156,6 +156,5 @@ export const getStaticProps: GetServerSideProps = async ({ params }) => {
       notFound: true,
     };
   }
-
   return { props: { productRequest } };
 };
