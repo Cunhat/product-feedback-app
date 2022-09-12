@@ -49,4 +49,32 @@ export const productRequestRouter = createRouter()
         },
       });
     },
+  })
+  .mutation('createProductRequest', {
+    input: z.object({
+      title: z.string(),
+      description: z.string(),
+      categoryId: z.string(),
+      userId: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const statusId = await ctx.prisma.status.findUnique({
+        where: {
+          name: 'Planned',
+        },
+      });
+
+      if (statusId === null) throw new Error('Failed to find two pokemon');
+
+      return await ctx.prisma.productRequest.create({
+        data: {
+          title: input.title,
+          description: input.description,
+          categoryId: input.categoryId,
+          userId: input.userId,
+          statusId: statusId.id,
+          upVotes: 0,
+        },
+      });
+    },
   });

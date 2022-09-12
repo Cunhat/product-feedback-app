@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { createRef, useState } from 'react';
 import type { NextPage } from 'next';
 import { trpc } from '../utils/trpc';
 import { Button } from '../components/Button';
@@ -10,11 +10,36 @@ import { Select } from '../components/Select';
 import { IconButton } from '../components/Button';
 
 const CreateFeedback: NextPage = () => {
-  const selectRef = useRef(null);
   const router = useRouter();
+  const category = trpc.useQuery(['category.getAllCategories'], {
+    refetchInterval: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  });
+  const selectRef = createRef<HTMLInputElement>();
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+
+  const utils = trpc.useContext();
+
+  const createFeedbackMutation = trpc.useMutation(['productRequest.createProductRequest'], {
+    onSuccess: () => {
+      utils.invalidateQueries(['productRequest.getAllProductRequests']);
+      router.push('/');
+    },
+  });
 
   const addFeedbackHandler = () => {
-   // console.log(selectRef.current.value);
+    createFeedbackMutation.mutate({
+      title: title,
+      description: description,
+      categoryId: selectRef?.current?.value!,
+      userId: 'cl7t3e5ew0019x4wddqmz9fs7', //Will be hardcoded until we have auth
+    });
+  };
+
+  const checkIfCanSubmit = () => {
+    return title === '' && description === '';
   };
 
   return (
@@ -31,18 +56,16 @@ const CreateFeedback: NextPage = () => {
           <div>
             <h1 className='font-bold text-dark-blue text-small mb-[2px]'>Feedback Title</h1>
             <h2 className='font-regular text-gray-custom text-small mb-4'>Add a short, descriptive headline</h2>
-            <input className='border-none bg-stone rounded-sm px-4 py-3 w-full font-regular text-[15px] text-dark-blue ' type='text' />
+            <input
+              onChange={(e) => setTitle(e.target.value)}
+              className='border-none bg-stone rounded-sm px-4 py-3 w-full font-regular text-[15px] text-dark-blue '
+              type='text'
+            />
           </div>
           <div>
             <h1 className='font-bold text-dark-blue text-small mb-[2px]'>Category</h1>
             <h2 className='font-regular text-gray-custom text-small mb-4'>Choose a category for your feedback</h2>
-            <Select
-              ref={selectRef}
-              value={[
-                { label: 'teste', id: '123' },
-                { label: 'teste123', id: '1234' },
-              ]}
-            />
+            <Select ref={selectRef} value={category.data as Array<{ name: string; id: string }>} />
           </div>
           <div>
             <h1 className='font-bold text-dark-blue text-small mb-[2px]'>Feedback Detail</h1>
@@ -52,12 +75,13 @@ const CreateFeedback: NextPage = () => {
             <textarea
               maxLength={250}
               style={{ resize: 'none' }}
+              onChange={(e) => setDescription(e.target.value)}
               className='bg-stone w-full h-20 px-6 py-4 font-regular text-[15px] text-dark-blue rounded-[5px] flex-1'
             />
           </div>
           <div className='flex gap-4 justify-end mt-2'>
-            <Button color='darkBlue' width='w-[93px]' text='Cancel' onClick={() => {}} />
-            <Button color='violet' text='Add Feedback' onClick={addFeedbackHandler} />
+            <Button color='darkBlue' width='w-[93px]' text='Cancel' onClick={() => router.back()} />
+            <Button disabled={checkIfCanSubmit()} color='violet' text='Add Feedback' onClick={() => addFeedbackHandler()} />
           </div>
         </div>
       </div>

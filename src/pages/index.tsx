@@ -12,9 +12,21 @@ import { useRouter } from 'next/router';
 //import Data from '..//data.json';
 
 const Home: NextPage = () => {
-  const category = trpc.useQuery(['category.getAllCategories']);
-  const status = trpc.useQuery(['status.getAllStatus']);
-  const products = trpc.useQuery(['productRequest.getAllProductRequests']);
+  const category = trpc.useQuery(['category.getAllCategories'], {
+    refetchInterval: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  });
+  const status = trpc.useQuery(['status.getAllStatus'], {
+    refetchInterval: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  });
+  const products = trpc.useQuery(['productRequest.getAllProductRequests'], {
+    refetchInterval: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  });
   const router = useRouter();
 
   return (

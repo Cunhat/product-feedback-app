@@ -5,6 +5,7 @@ type ButtonProps = {
   onClick: () => void;
   color: 'violet' | 'blue' | 'darkBlue' | 'red';
   width?: string;
+  disabled?: boolean;
 };
 
 export const Button: React.FC<PropsWithChildren<ButtonProps>> = (props) => {
@@ -40,6 +41,7 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = (props) => {
 
   return (
     <button
+      disabled={props.disabled}
       className={`rounded-[10px] ${getColor(props.color)} ${props.width ? props.width : 'w-40'}  h-11 text-white ${getHoverColor(
         props.color,
       )}`}

@@ -138,15 +138,6 @@ const AddReply: React.FC = () => {
   );
 };
 
-// export async function getStaticPaths() {
-//   const products = Data.productRequests;
-
-//   const paths = products.map((product) => ({
-//     params: { productRequestId: product.id.toString() },
-//   }));
-
-//   return { paths, fallback: true };
-// }
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const productRequest = await getCommentById(params?.productRequestId as string);
