@@ -1,3 +1,4 @@
+import { redirect } from 'next/dist/server/api-utils/index.js';
 import { env } from './src/env/server.mjs';
 
 /**
@@ -17,5 +18,19 @@ export default defineNextConfig({
   swcMinify: true,
   images: {
     dangerouslyAllowSVG: true,
+  },
+  redirects: async () => {
+    return [
+      {
+        source: '/createFeedback',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/editFeedback',
+        destination: '/',
+        permanent: true,
+      },
+    ]
   }
 });

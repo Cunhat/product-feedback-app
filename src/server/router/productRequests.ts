@@ -88,6 +88,30 @@ export const productRequestRouter = createRouter()
         where: {
           id: input.id,
         },
+        include: {
+          category: true,
+          status: true,
+          user: true,
+          comments: {
+            include: {
+              user: true,
+              parent: {
+                include: {
+                  user: true,
+                },
+              },
+              replies: {
+                include: {
+                  parent: {
+                    include: {
+                      user: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         data: {
           upVotes: input.upVotes,
         },

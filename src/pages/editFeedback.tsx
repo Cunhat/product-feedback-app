@@ -40,8 +40,8 @@ const EditFeedback: NextPage = () => {
             <Select
               ref={selectRef}
               value={[
-                { label: 'teste', id: '123' },
-                { label: 'teste123', id: '1234' },
+                { name: 'teste', id: '123' },
+                { name: 'teste123', id: '1234' },
               ]}
             />
           </div>
@@ -51,8 +51,8 @@ const EditFeedback: NextPage = () => {
             <Select
               ref={updateRef}
               value={[
-                { label: 'teste', id: '123' },
-                { label: 'teste123', id: '1234' },
+                { name: 'teste', id: '123' },
+                { name: 'teste123', id: '1234' },
               ]}
             />
           </div>

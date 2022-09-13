@@ -14,10 +14,15 @@ type UpVoteProps = {
 export const UpVote: React.FC<PropsWithChildren<UpVoteProps>> = (props) => {
   const [active, setActive] = React.useState<boolean>(props.active);
   const [counter, setCounter] = React.useState<number>(props.number);
+  const queryClient = trpc.useContext();
 
-  const upVote = trpc.useMutation(['productRequest.upVote']);
+  const upVote = trpc.useMutation(['productRequest.upVote'], {
+    onSuccess() {
+      queryClient.refetchQueries(['productRequest.getAllProductRequests']);
+    },
+  });
 
-  const onClick = (e) => {
+  const onClick = (e:React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     let auxCounter = counter;
 
