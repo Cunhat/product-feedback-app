@@ -1,23 +1,35 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useEffect } from 'react';
+import { flushSync } from 'react-dom';
 import Image from 'next/image';
 import Icon from '../../assets/icons/icon-arrow-up.svg';
 import IconWhite from '../../assets/icons/icon-arrow-up-white.svg';
+import { trpc } from '../../utils/trpc';
 
 type UpVoteProps = {
   number: number;
   active: boolean;
+  productId: string;
 };
 
 export const UpVote: React.FC<PropsWithChildren<UpVoteProps>> = (props) => {
   const [active, setActive] = React.useState<boolean>(props.active);
   const [counter, setCounter] = React.useState<number>(props.number);
 
-  const onClick = () => {
-    setCounter((oldCounter) => {
-      if (active) return oldCounter - 1;
-      return oldCounter + 1;
-    });
+  const upVote = trpc.useMutation(['productRequest.upVote']);
+
+  const onClick = (e) => {
+    e.stopPropagation();
+    let auxCounter = counter;
+
+    if (active) {
+      auxCounter--;
+    } else {
+      auxCounter++;
+    }
+
     setActive(!active);
+    setCounter(auxCounter);
+    upVote.mutate({ id: props.productId, upVotes: auxCounter });
   };
 
   return (

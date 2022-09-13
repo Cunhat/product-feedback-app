@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { UpVote } from '../UpVote';
 import IconComment from '../../assets/icons/icon-comments.svg';
 import { Tag } from '../Tag';
+import { useRouter } from 'next/router';
 
 type ProductRequestProps = {
   title: string;
@@ -16,11 +17,16 @@ type ProductRequestProps = {
 };
 
 export const ProductRequest: React.FC<ProductRequestProps> = (props) => {
+  const router = useRouter();
   return (
-    <Link href={`/productRequest/${props.productRequestId}`}>
+    <div
+      onClick={() => {
+        router.push(`/productRequest/${props.productRequestId}`);
+      }}
+    >
       <div className='flex py-7 px-8 bg-white rounded-[10px] cursor-pointer'>
         <div className='mr-5'>
-          <UpVote number={props.upvotes} active={false} />
+          <UpVote productId={props.productRequestId} number={props.upvotes} active={false} />
         </div>
         <div className='flex flex-1 flex-col'>
           <h2 className='text-dark-blue font-bold text-[18px] mb-1'>{props.title}</h2>
@@ -32,6 +38,6 @@ export const ProductRequest: React.FC<ProductRequestProps> = (props) => {
           <p className='text-dark-blue text-[16px] font-bold'>{props.comments}</p>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };

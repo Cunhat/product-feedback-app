@@ -77,4 +77,20 @@ export const productRequestRouter = createRouter()
         },
       });
     },
+  })
+  .mutation('upVote', {
+    input: z.object({
+      id: z.string(),
+      upVotes: z.number(),
+    }),
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.productRequest.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          upVotes: input.upVotes,
+        },
+      });
+    },
   });
