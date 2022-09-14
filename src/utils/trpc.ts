@@ -35,3 +35,7 @@ export type CommentWithReplies = Comment & {
 };
 
 export type ProductRequest = inferQueryOutput<'productRequest.getAllProductRequests'>[number];
+
+export type Category = inferQueryOutput<'category.getAllCategories'>[number];
+
+export type Status = inferQueryOutput<'status.getAllStatus'>[number];

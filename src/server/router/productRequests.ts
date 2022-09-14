@@ -117,4 +117,26 @@ export const productRequestRouter = createRouter()
         },
       });
     },
+  })
+  .mutation('updateProductRequest', {
+    input: z.object({
+      id: z.string(),
+      title: z.string(),
+      description: z.string(),
+      categoryId: z.string(),
+      statusId: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.productRequest.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          title: input.title,
+          description: input.description,
+          categoryId: input.categoryId,
+          statusId: input.statusId,
+        },
+      });
+    },
   });
