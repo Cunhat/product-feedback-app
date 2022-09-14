@@ -27,10 +27,10 @@ export default defineNextConfig({
         permanent: true,
       },
       {
-        source: '/editFeedback',
-        destination: '/',
+        source: '/productRequest/:productRequestId/editFeedback',
+        destination: '/productRequest/:productRequestId',
         permanent: true,
       },
-    ]
-  }
+    ];
+  },
 });

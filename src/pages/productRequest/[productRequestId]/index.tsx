@@ -4,16 +4,15 @@ import { useRouter } from 'next/router';
 import type { GetServerSideProps } from 'next';
 import Image from 'next/image';
 
-import { Button, IconButton } from '../../components/Button';
-import { ProductRequest as ProductRequestComponent } from '../../components/ProductRequest';
-import Img from '../../assets/user-images/image-anne.jpg';
+import { Button, IconButton } from '@/components/Button';
+import { ProductRequest as ProductRequestComponent } from '@/components/ProductRequest';
+import Img from '@/assets/user-images/image-anne.jpg';
 
-import Data from '../../data.json';
-import { Comment, ProductRequest } from '../../utils/trpc';
-import { getCommentById } from '../api/productRequests';
-import { inferQueryOutput } from '../../utils/trpc';
+import { Comment, ProductRequest } from '@/utils/trpc';
+import { getCommentById } from '@/pages/api/productRequests';
 
-import formComments from '..//..//utils//formatComments';
+
+import formComments from '@/utils//formatComments';
 
 type ProductRequestProps = {
   productRequest: ProductRequest;
@@ -38,7 +37,7 @@ const ProductRequest: NextPage<ProductRequestProps> = (props) => {
       <div className='max-w-[700px] flex flex-col flex-1 gap-6'>
         <div className='flex justify-between'>
           <IconButton onlyLabel text='Go back' onClick={() => router.back()} isSecondary />
-          <Button color='blue' text='Edit Feedback' onClick={() => router.push('/editFeedback')} />
+          <Button color='blue' text='Edit Feedback' onClick={() => router.push(`${commentInfo.id}/editFeedback`)} />
         </div>
         <ProductRequestComponent
           title={commentInfo?.title!}
@@ -137,7 +136,6 @@ const AddReply: React.FC = () => {
     </div>
   );
 };
-
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const productRequest = await getCommentById(params?.productRequestId as string);
