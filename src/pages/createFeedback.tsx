@@ -1,6 +1,6 @@
 import React, { createRef, useState } from 'react';
 import type { NextPage } from 'next';
-import { trpc } from '../utils/trpc';
+import { trpc, Category } from '../utils/trpc';
 import { Button } from '../components/Button';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -9,9 +9,15 @@ import NewFeedbackImg from '../assets/icons/icon-new-feedback.svg';
 import { Select } from '../components/Select';
 import { IconButton } from '../components/Button';
 
+type SelectedCategory =
+  | (Category & {
+      selected?: boolean;
+    })
+  | {};
+
 const CreateFeedback: NextPage = () => {
   const router = useRouter();
-  const category = trpc.useQuery(['category.getAllCategories'], {
+  const { data, isSuccess } = trpc.useQuery(['category.getAllCategories'], {
     refetchInterval: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
@@ -19,6 +25,7 @@ const CreateFeedback: NextPage = () => {
   const selectRef = createRef<HTMLInputElement>();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [category, setCategory] = React.useState<string>('');
 
   const utils = trpc.useContext();
 
@@ -33,7 +40,7 @@ const CreateFeedback: NextPage = () => {
     createFeedbackMutation.mutate({
       title: title,
       description: description,
-      categoryId: selectRef?.current?.value!,
+      categoryId: category,
       userId: 'cl7t3e5ew0019x4wddqmz9fs7', //TO-DO Will be hardcoded until we have auth
     });
   };
@@ -65,7 +72,7 @@ const CreateFeedback: NextPage = () => {
           <div>
             <h1 className='font-bold text-dark-blue text-small mb-[2px]'>Category</h1>
             <h2 className='font-regular text-gray-custom text-small mb-4'>Choose a category for your feedback</h2>
-            <Select ref={selectRef} value={category.data as Array<{ name: string; id: string }>} />
+            <Select onChange={(e) => setCategory(e)} data={data || []} value={category} />
           </div>
           <div>
             <h1 className='font-bold text-dark-blue text-small mb-[2px]'>Feedback Detail</h1>
