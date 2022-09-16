@@ -1,5 +1,6 @@
 import { createRouter } from './context';
 import { z } from 'zod';
+import { resolve } from 'path';
 
 export const commentRouter = createRouter()
   .query('getAllComments', {
@@ -50,6 +51,38 @@ export const commentRouter = createRouter()
               },
             },
           },
+        },
+      });
+    },
+  })
+  .mutation('createComment', {
+    input: z.object({
+      content: z.string().min(1),
+      productId: z.string(),
+      parentId: z.string().optional(),
+    }),
+    async resolve({ ctx, input }) {
+      await ctx.prisma.comment.create({
+        data: {
+          //productRequestId: input.productId,
+          content: input.content,
+          user: {
+            connect: {
+              id: 'cl7t3e5ew0019x4wddqmz9fs7', //TODO: get user id from session
+            },
+          },
+          ProductRequest: {
+            connect: {
+              id: input.productId,
+            },
+          },
+          ...(input.parentId && {
+            parent: {
+              connect: {
+                id: input.parentId,
+              },
+            },
+          }),
         },
       });
     },

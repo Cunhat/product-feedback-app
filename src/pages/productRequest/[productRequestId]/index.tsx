@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import type { GetServerSideProps } from 'next';
@@ -8,9 +8,8 @@ import { Button, IconButton } from '@/components/Button';
 import { ProductRequest as ProductRequestComponent } from '@/components/ProductRequest';
 import Img from '@/assets/user-images/image-anne.jpg';
 
-import { Comment, ProductRequest } from '@/utils/trpc';
+import { Comment, ProductRequest, trpc } from '@/utils/trpc';
 import { getCommentById } from '@/pages/api/productRequests';
-
 
 import formComments from '@/utils//formatComments';
 
@@ -21,6 +20,8 @@ type ProductRequestProps = {
 const ProductRequest: NextPage<ProductRequestProps> = (props) => {
   const commentInfo = props.productRequest;
   const router = useRouter();
+  const newCommentRef = useRef<HTMLTextAreaElement>(null);
+  const [content, setContent] = useState('');
 
   let formattedComments = new Array<Comment>();
 
@@ -31,6 +32,19 @@ const ProductRequest: NextPage<ProductRequestProps> = (props) => {
   if (commentInfo === null || commentInfo === undefined) {
     return <h1>Loading...</h1>;
   }
+
+  const createComment = trpc.useMutation(['commentRequest.createComment'], {
+    onSuccess: () => {
+      setContent('');
+    },
+  });
+
+  const postComment = () => {
+    createComment.mutate({
+      content: content,
+      productId: commentInfo?.id,
+    });
+  };
 
   return (
     <div className='h-screen justify-center flex pt-20 bg-background-custom overflow-auto'>
@@ -65,12 +79,14 @@ const ProductRequest: NextPage<ProductRequestProps> = (props) => {
           <p className='font-bold text-dark-blue text-[18px] mb-6'>Add Comment</p>
           <textarea
             maxLength={250}
+            onChange={(e) => setContent(e.target.value)}
+            value={content}
             style={{ resize: 'none' }}
             className='bg-stone h-20 px-6 py-4 font-regular text-[15px] text-dark-blue rounded-[5px]'
           />
           <div className='flex justify-between items-center mt-4'>
             <p className='text-[15px] text-dark-blue'>255 characters left</p>
-            <Button color='violet' text='Post Comment' onClick={() => {}} />
+            <Button disabled={content.length === 0} color='violet' text='Post Comment' onClick={postComment} />
           </div>
         </div>
       </div>
@@ -111,7 +127,7 @@ const Comment: React.FC<CommentProps> = (props) => {
             {props.comment?.content}
           </span>
         </div>
-        {addReply && <AddReply />}
+        {addReply && <AddReply parentId={props.comment.id} productRequestId={props.comment.productRequestId} />}
         <div className='ml-[0px] mt-7'>
           {props.comment?.replies?.length > 0 &&
             props.comment?.replies.map((reply, index) => {
@@ -124,15 +140,33 @@ const Comment: React.FC<CommentProps> = (props) => {
   );
 };
 
-const AddReply: React.FC = () => {
+const AddReply: React.FC<{ parentId: string; productRequestId: string }> = ({ parentId, productRequestId }) => {
+  const [content, setContent] = useState('');
+
+  const createComment = trpc.useMutation(['commentRequest.createComment'], {
+    onSuccess: () => {
+      setContent('');
+    },
+  });
+
+  const addReply = () => {
+    createComment.mutate({
+      content: content,
+      parentId: parentId,
+      productId: productRequestId,
+    });
+  };
+
   return (
     <div className='flex gap-4 mt-6'>
       <textarea
         maxLength={250}
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
         style={{ resize: 'none' }}
         className='bg-stone h-20 px-6 py-4 font-regular text-[15px] text-dark-blue rounded-[5px] flex-1'
       />
-      <Button width={'w-[117px]'} color='violet' text='Post Reply' onClick={() => {}} />
+      <Button disabled={content.length === 0} width={'w-[117px]'} color='violet' text='Post Reply' onClick={addReply} />
     </div>
   );
 };
