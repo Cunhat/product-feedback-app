@@ -60,7 +60,7 @@ const EditFeedback: NextPage<ProductRequestProps> = (props) => {
   };
 
   return (
-    <div className='bg-stone flex flex-col justify-center items-center h-screen w-screen'>
+    <div className='bg-stone flex flex-col 2xl:justify-center items-center p-10 h-screen box-border overflow-auto'>
       <div className='w-[540px] mb-[53px]'>
         <IconButton onlyLabel isSecondary text='Go Back' onClick={() => router.back()} />
       </div>
