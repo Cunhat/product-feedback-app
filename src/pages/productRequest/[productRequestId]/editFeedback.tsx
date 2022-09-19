@@ -45,6 +45,13 @@ const EditFeedback: NextPage<ProductRequestProps> = (props) => {
     },
   });
 
+  const deleteProductMutation = trpc.useMutation(['productRequest.deleteProductRequest'], {
+    onSuccess: () => {
+      utils.invalidateQueries(['productRequest.getAllProductRequests']);
+      router.push('/');
+    },
+  });
+
   const addFeedbackHandler = () => {
     updateMutation.mutate({
       id: commentInfo?.id,
@@ -104,7 +111,12 @@ const EditFeedback: NextPage<ProductRequestProps> = (props) => {
             />
           </div>
           <div className='flex gap-4 mt-2'>
-            <Button color='red' width='w-[93px]' text='Delete' onClick={() => {}} />
+            <Button
+              color='red'
+              width='w-[93px]'
+              text='Delete'
+              onClick={() => deleteProductMutation.mutate({ id: props.productRequest.id })}
+            />
             <div className='flex gap-4 ml-auto'>
               <Button color='darkBlue' width='w-[93px]' text='Cancel' onClick={() => router.back()} />
               <Button disabled={checkIfCanSubmit()} color='violet' text='Add Feedback' onClick={addFeedbackHandler} />

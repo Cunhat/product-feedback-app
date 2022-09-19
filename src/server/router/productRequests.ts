@@ -139,4 +139,16 @@ export const productRequestRouter = createRouter()
         },
       });
     },
+  })
+  .mutation('deleteProductRequest', {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.productRequest.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    },
   });

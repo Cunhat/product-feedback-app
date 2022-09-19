@@ -3,6 +3,7 @@
 
 generator client {
     provider = "prisma-client-js"
+    previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
@@ -36,8 +37,8 @@ model Comment {
     user   User   @relation(fields: [userId], references: [id])
     userId String
 
-    ProductRequest   ProductRequest   @relation(fields: [productRequestId], references: [id])
-    productRequestId String
+    ProductRequest   ProductRequest   @relation(fields: [productRequestId], references: [id], onDelete: Cascade)
+    productRequestId String 
 
     replies Comment[] @relation("comment_replies")
     parent   Comment?  @relation("comment_replies", fields: [parentId], references: [id])
@@ -54,7 +55,7 @@ model ProductRequest {
     categoryId String
     status Status @relation(fields: [statusId], references: [id])
     statusId String
-    user User @relation(fields: [userId], references: [id])
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId String
     
 }
