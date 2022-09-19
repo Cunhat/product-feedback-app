@@ -8,6 +8,7 @@ import { Button } from '../components/Button';
 import BulbImg from '../assets/icons/bulb.svg';
 import { ProductRequest } from '../components/ProductRequest';
 import { useRouter } from 'next/router';
+import ContentLoader from 'react-content-loader';
 
 //import Data from '..//data.json';
 
@@ -29,6 +30,8 @@ const Home: NextPage = () => {
   });
   const router = useRouter();
 
+  const numberOfLoaders = [1, 2, 3];
+
   return (
     <div className='flex gap-[30px] px-[165px] pt-[94px] w-full h-screen bg-stone'>
       <div className=' w-[255px] h-full flex flex-col gap-[24px]'>
@@ -36,9 +39,20 @@ const Home: NextPage = () => {
           <Badge />
         </div>
         <div className=' p-[24px] bg-white rounded-[10px] flex gap-[8px] flex-wrap'>
-          <Tag disabled={false} key={'all'} text='All' isActive></Tag>
-          {category.isSuccess &&
-            category.data.map((filter) => <Tag disabled={false} key={filter.id} text={filter.name} isActive={false} />)}
+          {category?.isLoading && (
+            <ContentLoader speed={2} width={'100%'} height={50} backgroundColor='#f3f3f3' foregroundColor='#ecebeb'>
+              <rect x='0' y='0' rx='10' ry='10' width='50' height='30' />
+              <rect x='60' y='0' rx='10' ry='10' width='50' height='30' />
+            </ContentLoader>
+          )}
+          {category.isSuccess && (
+            <>
+              <Tag disabled={false} key={'all'} text='All' isActive></Tag>
+              {category.data.map((filter) => (
+                <Tag disabled={false} key={filter.id} text={filter.name} isActive={false} />
+              ))}
+            </>
+          )}
         </div>
         <div className='bg-white rounded-[10px] px-6 pt-[19px] pb-6'>
           <div className='flex justify-between items-center mb-[24px]'>
@@ -46,6 +60,13 @@ const Home: NextPage = () => {
             <p className='font-regular text-[13px] text-custom-blue underline hover:cursor-pointer'>View</p>
           </div>
           <div className='flex flex-col gap-[8px]'>
+            {status?.isLoading && (
+              <ContentLoader speed={2} width={'100%'} height={50} backgroundColor='#f3f3f3' foregroundColor='#ecebeb'>
+                <rect x='0' y='0' rx='5' ry='5' width='100%' height='10' />
+                <rect x='0' y='20' rx='5' ry='5' width='100%' height='10' />
+                <rect x='0' y='40' rx='5' ry='5' width='100%' height='10' />
+              </ContentLoader>
+            )}
             {status.isSuccess &&
               status.data?.map((item) => (
                 <RoadMapItem key={item.id} title={item.name} color='bg-orange-pastel' value={item.productRequest.length} />
@@ -66,8 +87,27 @@ const Home: NextPage = () => {
             <Button text='+ Add Feedback' color='violet' onClick={() => router.push('/createFeedback')} />
           </div>
         </div>
-
-        {products?.isSuccess ? (
+        {products?.isLoading ? (
+          <>
+            {numberOfLoaders.map((index) => (
+              <ContentLoader
+                speed={2}
+                width={'100%'}
+                height={156}
+                viewBox='0 0 100% 124'
+                backgroundColor='#f3f3f3'
+                foregroundColor='#ecebeb'
+                className='px-8 py-7 bg-white rounded-[10px]'
+                key={index}
+              >
+                <rect x='0' y='0' rx='5' ry='5' width='40' height='53' />
+                <rect x='60' y='10' rx='5' ry='5' width='50%' height='10' />
+                <rect x='60' y='33' rx='5' ry='5' width='60%' height='10' />
+                <rect x='60' y='71' rx='5' ry='5' width='84' height='23' />
+              </ContentLoader>
+            ))}
+          </>
+        ) : products?.isSuccess && products?.data?.length > 0 ? (
           <div className='flex-1 flex flex-col overflow-auto gap-4'>
             {products?.data.map((elem) => {
               return (
