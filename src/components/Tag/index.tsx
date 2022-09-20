@@ -4,6 +4,7 @@ type TagProps = {
   text: string;
   isActive: boolean;
   disabled: boolean;
+  onStateChange?: (id: string, isActive: boolean) => void;
 };
 
 export const Tag: React.FC<TagProps> = (props) => {
@@ -12,6 +13,7 @@ export const Tag: React.FC<TagProps> = (props) => {
   const handleClick = () => {
     if (props.disabled) return;
     setIsActive(!isActive);
+    props?.onStateChange && props?.onStateChange(props.text, !isActive);
   };
 
   return (

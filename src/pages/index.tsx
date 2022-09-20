@@ -1,3 +1,4 @@
+import React from 'react';
 import type { NextPage } from 'next';
 import { trpc } from '../utils/trpc';
 import { Badge } from '../components/Badge';
@@ -9,14 +10,28 @@ import BulbImg from '../assets/icons/bulb.svg';
 import { ProductRequest } from '../components/ProductRequest';
 import { useRouter } from 'next/router';
 import ContentLoader from 'react-content-loader';
+import { Category } from '@prisma/client';
+import { deepStrictEqual } from 'assert';
 
 //import Data from '..//data.json';
+
+type FilterCategory = {
+  name: string;
+  isActive: boolean;
+};
 
 const Home: NextPage = () => {
   const category = trpc.useQuery(['category.getAllCategories'], {
     refetchInterval: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
+    onSuccess: (data) => {
+      let auxArray: Array<FilterCategory> = [];
+      data.forEach((category) => {
+        auxArray.push({ name: category.name, isActive: false });
+      });
+      setFilterTags((oldVal) => [...oldVal, ...auxArray]);
+    },
   });
   const status = trpc.useQuery(['status.getAllStatus'], {
     refetchInterval: false,
@@ -29,8 +44,19 @@ const Home: NextPage = () => {
     refetchOnWindowFocus: false,
   });
   const router = useRouter();
+  const [filterTags, setFilterTags] = React.useState<Array<FilterCategory>>([{ name: 'All', isActive: true }]);
 
   const numberOfLoaders = [1, 2, 3];
+
+  const onStateChange = (name: string, isActive: boolean) => {
+    let auxArray: Array<FilterCategory> = [...filterTags];
+    auxArray.forEach((tag) => {
+      if (tag.name.toLowerCase() === name.toLowerCase()) {
+        tag.isActive = isActive;
+      }
+    });
+    setFilterTags(auxArray);
+  };
 
   return (
     <div className='flex gap-[30px] px-[165px] pt-[94px] w-full h-screen bg-stone'>
@@ -47,9 +73,9 @@ const Home: NextPage = () => {
           )}
           {category.isSuccess && (
             <>
-              <Tag disabled={false} key={'all'} text='All' isActive></Tag>
-              {category.data.map((filter) => (
-                <Tag disabled={false} key={filter.id} text={filter.name} isActive={false} />
+              <Tag onStateChange={onStateChange} disabled={false} key={'all'} text='All' isActive></Tag>
+              {category.data.map((category) => (
+                <Tag onStateChange={onStateChange} disabled={false} key={category.id} text={category.name} isActive={false} />
               ))}
             </>
           )}
@@ -109,19 +135,24 @@ const Home: NextPage = () => {
           </>
         ) : products?.isSuccess && products?.data?.length > 0 ? (
           <div className='flex-1 flex flex-col overflow-auto gap-4'>
-            {products?.data.map((elem) => {
-              return (
-                <ProductRequest
-                  title={elem.title}
-                  description={elem.description}
-                  category={elem.category.name}
-                  upvotes={elem.upVotes}
-                  comments={elem.comments.length || 0}
-                  key={elem.id}
-                  productRequestId={elem.id}
-                />
-              );
-            })}
+            {products?.data
+              .filter((elem) => {
+                if (filterTags.find((elem) => elem.name.toLocaleLowerCase() === 'all')?.isActive) return elem;
+                return filterTags.find((tag) => tag.name === elem.category.name)?.isActive;
+              })
+              .map((elem) => {
+                return (
+                  <ProductRequest
+                    title={elem.title}
+                    description={elem.description}
+                    category={elem.category.name}
+                    upvotes={elem.upVotes}
+                    comments={elem.comments.length || 0}
+                    key={elem.id}
+                    productRequestId={elem.id}
+                  />
+                );
+              })}
           </div>
         ) : (
           <div className='flex-1 bg-white rounded-[10px] max-h-[600px]'>
