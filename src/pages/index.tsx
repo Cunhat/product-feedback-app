@@ -10,10 +10,8 @@ import BulbImg from '../assets/icons/bulb.svg';
 import { ProductRequest } from '../components/ProductRequest';
 import { useRouter } from 'next/router';
 import ContentLoader from 'react-content-loader';
-import { Category } from '@prisma/client';
-import { deepStrictEqual } from 'assert';
 
-//import Data from '..//data.json';
+
 
 type FilterCategory = {
   name: string;
