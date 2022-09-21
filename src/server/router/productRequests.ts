@@ -45,7 +45,26 @@ export const productRequestRouter = createRouter()
           category: true,
           status: true,
           user: true,
-          comments: true,
+          comments: {
+            include: {
+              user: true,
+              parent: {
+                include: {
+                  user: true,
+                },
+              },
+              replies: {
+                include: {
+                  user: true,
+                  parent: {
+                    include: {
+                      user: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       });
     },

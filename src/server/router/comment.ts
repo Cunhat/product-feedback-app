@@ -15,6 +15,7 @@ export const commentRouter = createRouter()
           },
           replies: {
             include: {
+              user: true,
               parent: {
                 include: {
                   user: true,
