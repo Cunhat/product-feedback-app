@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -15,8 +15,6 @@ import ContentLoader from 'react-content-loader';
 const ProductRequest: NextPage = () => {
   const router = useRouter();
   const { productRequestId } = router.query;
-  console.log(productRequestId);
-  const newCommentRef = useRef<HTMLTextAreaElement>(null);
   const [content, setContent] = useState('');
 
 

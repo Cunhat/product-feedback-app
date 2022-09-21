@@ -9,15 +9,10 @@ import NewFeedbackImg from '../assets/icons/icon-new-feedback.svg';
 import { Select } from '../components/Select';
 import { IconButton } from '../components/Button';
 
-type SelectedCategory =
-  | (Category & {
-      selected?: boolean;
-    })
-  | {};
 
 const CreateFeedback: NextPage = () => {
   const router = useRouter();
-  const { data, isSuccess } = trpc.useQuery(['category.getAllCategories'], {
+  const { data } = trpc.useQuery(['category.getAllCategories'], {
     refetchInterval: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
