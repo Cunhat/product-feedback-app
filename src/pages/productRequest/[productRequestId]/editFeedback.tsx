@@ -34,8 +34,8 @@ const EditFeedback: NextPage = () => {
 
   const [title, setTitle] = React.useState(productInfo?.data?.title);
   const [description, setDescription] = React.useState(productInfo?.data?.description);
-  const [status, setStatus] = React.useState(statusQuery?.data?.find((elem) => elem.id === productInfo?.data?.categoryId)?.id);
-  const [category, setCategory] = React.useState(categoryQuery?.data?.find((elem) => elem.id === productInfo?.data?.statusId)?.id);
+  const [status, setStatus] = React.useState(productInfo?.data?.statusId);
+  const [category, setCategory] = React.useState(productInfo?.data?.categoryId);
 
   const utils = trpc.useContext();
 
@@ -119,7 +119,14 @@ const EditFeedback: NextPage = () => {
             <div>
               <h1 className='font-bold text-dark-blue text-small mb-[2px]'>Category</h1>
               <h2 className='font-regular text-gray-custom text-small mb-4'>Choose a category for your feedback</h2>
-              <Select onChange={(e) => setCategory(e)} value={category || ''} data={categoryQuery?.data!} />
+              <Select
+                onChange={(e) => {
+                  console.log(e);
+                  setCategory(e);
+                }}
+                value={category!}
+                data={categoryQuery?.data!}
+              />
             </div>
             <div>
               <h1 className='font-bold text-dark-blue text-small mb-[2px]'>Update Status</h1>
@@ -159,4 +166,3 @@ const EditFeedback: NextPage = () => {
 };
 
 export default EditFeedback;
-
