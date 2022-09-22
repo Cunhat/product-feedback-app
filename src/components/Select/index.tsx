@@ -1,5 +1,5 @@
 import React from 'react';
-import * as SelectComp from '@radix-ui/react-Select';
+import * as SelectComp from '@radix-ui/react-select';
 import Image from 'next/image';
 import CheckIcon from '@/assets/icons/icon-check.svg';
 import ArrowDown from '@/assets/icons/icon-arrow-down.svg';
