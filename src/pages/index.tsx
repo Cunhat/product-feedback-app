@@ -1,17 +1,15 @@
-import React from 'react';
 import type { NextPage } from 'next';
-import { trpc } from '../utils/trpc';
-import { Badge } from '../components/Badge';
-import { Tag } from '../components/Tag';
-import EmptyImg from '../assets/images/emptyComments.svg';
 import Image from 'next/image';
-import { Button } from '../components/Button';
-import BulbImg from '../assets/icons/bulb.svg';
-import { ProductRequest } from '../components/ProductRequest';
 import { useRouter } from 'next/router';
+import React from 'react';
 import ContentLoader from 'react-content-loader';
-
-
+import BulbImg from '../assets/icons/bulb.svg';
+import EmptyImg from '../assets/images/emptyComments.svg';
+import { Badge } from '../components/Badge';
+import { Button } from '../components/Button';
+import { ProductRequest } from '../components/ProductRequest';
+import { Tag } from '../components/Tag';
+import { trpc } from '../utils/trpc';
 
 type FilterCategory = {
   name: string;
@@ -41,7 +39,7 @@ const Home: NextPage = () => {
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
   });
-  
+
   const router = useRouter();
   const [filterTags, setFilterTags] = React.useState<Array<FilterCategory>>([{ name: 'All', isActive: true }]);
 
@@ -58,12 +56,12 @@ const Home: NextPage = () => {
   };
 
   return (
-    <div className='flex gap-[30px] px-[165px] pt-[94px] w-full h-screen bg-stone'>
-      <div className=' w-[255px] h-full flex flex-col gap-[24px]'>
-        <div className='h-[137px]'>
+    <div className='flex flex-col md:flex-col lg:flex-row gap-[30px] px-10 py-14 lg:px-[165px] lg:pt-[94px] h-screen bg-stone'>
+      <div className='lg:w-[255px] lg:h-full flex lg:flex-col md:flex-row flex-row gap-[24px] md:gap-[10px]'>
+        <div className='lg:h-[137px] flex-1 lg:flex-none'>
           <Badge />
         </div>
-        <div className=' p-[24px] bg-white rounded-[10px] flex gap-[8px] flex-wrap'>
+        <div className=' p-[24px] bg-white rounded-[10px] flex gap-[8px] flex-wrap flex-1 lg:flex-none'>
           {category?.isLoading && (
             <ContentLoader speed={2} width={'100%'} height={50} backgroundColor='#f3f3f3' foregroundColor='#ecebeb'>
               <rect x='0' y='0' rx='10' ry='10' width='50' height='30' />
@@ -79,7 +77,7 @@ const Home: NextPage = () => {
             </>
           )}
         </div>
-        <div className='bg-white rounded-[10px] px-6 pt-[19px] pb-6'>
+        <div className='bg-white rounded-[10px] px-6 pt-[19px] pb-6 flex-1 lg:flex-none'>
           <div className='flex justify-between items-center mb-[24px]'>
             <p className='font-bold text-lg text-dark-blue'>RoadMap</p>
             <p className='font-regular text-[13px] text-custom-blue underline hover:cursor-pointer'>View</p>
@@ -99,7 +97,7 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className='flex flex-col flex-1 h-full gap-[20px] pb-5'>
+      <div className='flex flex-col lg:h-full gap-[20px] pb-5 overflow-auto'>
         <div className='h-[72px] bg-dark-blue-2 rounded-[10px] mb-1 flex px-4 items-center'>
           <Image src={BulbImg} alt='Bulb' width={23} height={24} />
           <p className='text-white font-bold text-lg ml-4 text-4.5'>

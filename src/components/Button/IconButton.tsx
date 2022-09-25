@@ -1,5 +1,5 @@
-import React, { PropsWithChildren } from 'react';
 import Image from 'next/image';
+import React, { PropsWithChildren } from 'react';
 import Icon from '../../assets/icons/icon-back-button.svg';
 import IconSecondary from '../../assets/icons/icon-secondary-button.svg';
 
