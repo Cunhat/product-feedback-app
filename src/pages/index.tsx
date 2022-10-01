@@ -10,7 +10,9 @@ import BulbImg from '../assets/icons/bulb.svg';
 import { ProductRequest } from '../components/ProductRequest';
 import { useRouter } from 'next/router';
 import ContentLoader from 'react-content-loader';
-
+import { redirect } from 'next/dist/server/api-utils';
+import { getSession, GetSessionParams } from 'next-auth/react';
+import { GetServerSideProps } from 'next'
 
 
 type FilterCategory = {
@@ -41,7 +43,7 @@ const Home: NextPage = () => {
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
   });
-  
+
   const router = useRouter();
   const [filterTags, setFilterTags] = React.useState<Array<FilterCategory>>([{ name: 'All', isActive: true }]);
 
@@ -207,3 +209,22 @@ const EmptyState: React.FC<{}> = (props) => {
     </div>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async (context: GetSessionParams) => {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
+}

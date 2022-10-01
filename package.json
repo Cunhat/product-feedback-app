@@ -17,6 +17,7 @@
     "@trpc/react": "^9.27.2",
     "@trpc/server": "^9.27.2",
     "next": "12.2.3",
+    "next-auth": "^4.12.2",
     "react": "18.2.0",
     "react-content-loader": "^6.2.0",
     "react-dom": "18.2.0",
