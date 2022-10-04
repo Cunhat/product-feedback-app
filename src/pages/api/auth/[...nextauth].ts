@@ -3,29 +3,29 @@ import NextAuth, { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 // Prisma adapter for NextAuth, optional and can be removed
-// import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '@/server/db/client';
 //import { env } from '../../../env/server.mjs';
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
-  // callbacks: {
-  //   session({ session, user }) {
-  //     console.log("session", session);
-  //     console.log("user", user);
-  //     // if (session.user) {
-  //     //   session.user.id = user.id;
-  //     // }
-  //     return session;
-  //   },
-  // },
-  // Configure one or more authentication providers
-  // adapter: PrismaAdapter(prisma),
+  callbacks: {
+    jwt: ({ token, user }) => {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    session: ({ session, token }) => {
+      if (token) {
+        session.id = token.id;
+      }
+      console.log('session', session);
+      return session;
+    },
+  },
+
   providers: [
-    // DiscordProvider({
-    //   clientId: env.DISCORD_CLIENT_ID,
-    //   clientSecret: env.DISCORD_CLIENT_SECRET,
-    // }),
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
@@ -46,11 +46,14 @@ export const authOptions: NextAuthOptions = {
         }
       },
     }),
-
     // ...add more providers here
   ],
+  //adapter: PrismaAdapter(prisma), adapter will not work with credentials provider
   pages: {
     signIn: '/login',
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET,
   },
 };
 

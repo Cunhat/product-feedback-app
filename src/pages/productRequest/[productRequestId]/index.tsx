@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -11,12 +11,23 @@ import { Comment, trpc } from '@/utils/trpc';
 
 import formComments from '@/utils//formatComments';
 import ContentLoader from 'react-content-loader';
+import { useSession } from 'next-auth/react';
 
 const ProductRequest: NextPage = () => {
   const router = useRouter();
   const { productRequestId } = router.query;
   const [content, setContent] = useState('');
 
+  const { status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      router.push('/login');
+    },
+  });
+
+  useEffect(() => {
+    console.log(status);
+  }, [status]);
 
   const productInfo = trpc.useQuery(['productRequest.getProductRequestsById', { id: productRequestId as string }], {
     refetchInterval: false,
@@ -46,7 +57,7 @@ const ProductRequest: NextPage = () => {
             <Button color='blue' text='Edit Feedback' onClick={() => router.push(`${productInfo?.data?.id}/editFeedback`)} />
           )}
         </div>
-        {productInfo.isFetching ? (
+        {productInfo.isFetching || status === 'loading' ? (
           <ContentLoader
             speed={2}
             width={'100%'}
@@ -86,7 +97,7 @@ const ProductRequest: NextPage = () => {
             })}
           </div>
         )}
-        {!productInfo.isFetching && (
+        {!productInfo.isFetching && status === 'authenticated' && (
           <div className='flex flex-col rounded-sm bg-white px-8 py-6'>
             <p className='font-bold text-dark-blue text-[18px] mb-6'>Add Comment</p>
             <textarea

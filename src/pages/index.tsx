@@ -212,6 +212,7 @@ const EmptyState: React.FC<{}> = (props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context: GetSessionParams) => {
   const session = await getSession(context);
+  console.log(session)
 
   if (!session) {
     return {

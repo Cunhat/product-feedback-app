@@ -6,12 +6,13 @@ import superjson from 'superjson';
 import '../styles/globals.css';
 import { SessionProvider } from 'next-auth/react';
 import type { Session } from 'next-auth';
-import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
-import { loggerLink } from "@trpc/client/links/loggerLink";
+import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
+import { loggerLink } from '@trpc/client/links/loggerLink';
+import type { AppProps } from 'next/app';
 
-const MyApp: AppType<{ session: Session | null }> = ({ Component, pageProps: { session, ...pageProps } }) => {
+const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
-    <SessionProvider session={session}>
+    <SessionProvider session={pageProps.session}>
       <Component {...pageProps} />
     </SessionProvider>
   );
