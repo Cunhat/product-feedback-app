@@ -27,6 +27,7 @@ export type inferMutationInput<
 
 
 export type User = inferQueryOutput<'user.getAllUsers'>[number];
+export type Users = inferQueryOutput<'user.getAllUsers'>;
 
 export type Comment = inferQueryOutput<'commentRequest.getAllComments'>[number];
 

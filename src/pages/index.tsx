@@ -10,6 +10,9 @@ import { Button } from '../components/Button';
 import { ProductRequest } from '../components/ProductRequest';
 import { Tag } from '../components/Tag';
 import { trpc } from '../utils/trpc';
+import { redirect } from 'next/dist/server/api-utils';
+import { getSession, GetSessionParams } from 'next-auth/react';
+import { GetServerSideProps } from 'next';
 
 type FilterCategory = {
   name: string;
@@ -204,4 +207,24 @@ const EmptyState: React.FC<{}> = (props) => {
       </div>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context: GetSessionParams) => {
+  const session = await getSession(context);
+  console.log(session);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
 };
