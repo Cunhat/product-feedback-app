@@ -31,6 +31,7 @@ module.exports = {
       },
       backgroundImage: {
         'desktop-gradient': "url('/img/desktop/background-header.png')",
+        'mobile-gradient': "url('/img/mobile/background-header.png')",
       },
     },
   },
