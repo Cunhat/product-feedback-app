@@ -59,6 +59,14 @@ const HomeMobile: NextPage = () => {
     setFilterTags(auxArray);
   };
 
+  const [showSideBar, setShowSideBar] = React.useState(false);
+
+  const openSideBar = () => {
+    const scroll = showSideBar;
+    setShowSideBar(!scroll);
+    document.body.style.overflow = scroll ? 'unset' : 'hidden';
+  };
+
   return (
     <div className='h-full bg-stone flex flex-col'>
       {/* <Badge /> */}
@@ -68,9 +76,37 @@ const HomeMobile: NextPage = () => {
           <p className='font-regular text-white text-[13px] opacity-75'>Feedback Board</p>
         </div>
         <div className='ml-auto flex items-center'>
-          <Image src={IconHamburger} height={17} width={20} />
+          <Image src={IconHamburger} height={17} width={20} onClick={() => openSideBar()} className='cursor-pointer' />
         </div>
       </div>
+      {showSideBar && (
+        <div className='absolute bg-black h-full w-full z-10 top-[75px] flex justify-end bg-opacity-50'>
+          <div className='flex flex-col h-full bg-stone p-6 max-w-xs gap-6'>
+            <div className=' p-[24px] bg-white rounded-[10px] flex gap-[8px] flex-wrap'>
+              {category.isSuccess && (
+                <>
+                  <Tag onStateChange={onStateChange} disabled={false} key={'all'} text='All' isActive></Tag>
+                  {category.data.map((category) => (
+                    <Tag onStateChange={onStateChange} disabled={false} key={category.id} text={category.name} isActive={false} />
+                  ))}
+                </>
+              )}
+            </div>
+            <div className='bg-white rounded-[10px] px-6 pt-[19px] pb-6 h-fit'>
+              <div className='flex justify-between items-center mb-[24px]'>
+                <p className='font-bold text-lg text-dark-blue'>RoadMap</p>
+                <p className='font-regular text-[13px] text-custom-blue underline hover:cursor-pointer'>View</p>
+              </div>
+              <div className='flex flex-col gap-[8px]'>
+                {status.isSuccess &&
+                  status.data?.map((item) => (
+                    <RoadMapItem key={item.id} title={item.name} color='bg-orange-pastel' value={item.productRequest.length} />
+                  ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className='flex flex-1 flex-col gap-[20px]'>
         <div className='h-[72px] bg-dark-blue-2 mb-1 flex px-4 items-center'>
@@ -199,41 +235,4 @@ export const getServerSideProps: GetServerSideProps = async (context: GetSession
 };
 
 {
-  /* <div className=' p-[24px] bg-white rounded-[10px] flex gap-[8px] flex-wrap flex-1 lg:flex-none'>
-        {category?.isLoading && (
-          <ContentLoader speed={2} width={'100%'} height={50} backgroundColor='#f3f3f3' foregroundColor='#ecebeb'>
-            <rect x='0' y='0' rx='10' ry='10' width='50' height='30' />
-            <rect x='60' y='0' rx='10' ry='10' width='50' height='30' />
-          </ContentLoader>
-        )}
-        {category.isSuccess && (
-          <>
-            <Tag onStateChange={onStateChange} disabled={false} key={'all'} text='All' isActive></Tag>
-            {category.data.map((category) => (
-              <Tag onStateChange={onStateChange} disabled={false} key={category.id} text={category.name} isActive={false} />
-            ))}
-          </>
-        )}
-      </div> */
-}
-{
-  /* <div className='bg-white rounded-[10px] px-6 pt-[19px] pb-6 flex-1 lg:flex-none'>
-        <div className='flex justify-between items-center mb-[24px]'>
-          <p className='font-bold text-lg text-dark-blue'>RoadMap</p>
-          <p className='font-regular text-[13px] text-custom-blue underline hover:cursor-pointer'>View</p>
-        </div>
-        <div className='flex flex-col gap-[8px]'>
-          {status?.isLoading && (
-            <ContentLoader speed={2} width={'100%'} height={50} backgroundColor='#f3f3f3' foregroundColor='#ecebeb'>
-              <rect x='0' y='0' rx='5' ry='5' width='100%' height='10' />
-              <rect x='0' y='20' rx='5' ry='5' width='100%' height='10' />
-              <rect x='0' y='40' rx='5' ry='5' width='100%' height='10' />
-            </ContentLoader>
-          )}
-          {status.isSuccess &&
-            status.data?.map((item) => (
-              <RoadMapItem key={item.id} title={item.name} color='bg-orange-pastel' value={item.productRequest.length} />
-            ))}
-        </div>
-      </div> */
 }
